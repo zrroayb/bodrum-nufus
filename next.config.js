@@ -4,8 +4,6 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  basePath: "/nextnufus",
-  assetPrefix: "/nextnufus/",
   trailingSlash: true,
 };
 
