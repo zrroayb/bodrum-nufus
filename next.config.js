@@ -3,6 +3,8 @@ const nextConfig = {
   output: "export",
   images: {
     unoptimized: true,
+    loader: 'custom',
+    path: '',
   },
   basePath: "/nextnufus",
   assetPrefix: "/nextnufus/",
