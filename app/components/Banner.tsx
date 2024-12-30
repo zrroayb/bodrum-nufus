@@ -25,7 +25,7 @@ export default function Banner() {
         }}
       >
         <Image
-          src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/images/bodrum-marina.jpg`}
+          src={`${process.env.NODE_ENV === 'production' ? '/nextnufus' : ''}/images/bodrum-marina.jpg`}
           alt="Bodrum Marina Aerial View"
           fill
           style={{
