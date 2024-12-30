@@ -99,29 +99,34 @@ export default function Navbar() {
               component={Link}
               href="/"
               sx={{
-                fontWeight: 700,
-                color: 'primary.main',
+                fontWeight: 800,
                 textDecoration: 'none',
                 display: 'flex',
                 alignItems: 'center',
-                gap: 1,
-                '&:hover': {
-                  color: 'primary.dark',
+                gap: 1.5,
+                background: 'linear-gradient(135deg, #3B82F6 0%, #2563EB 100%)',
+                backgroundClip: 'text',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                fontSize: { xs: '1.4rem', sm: '1.6rem' },
+                position: 'relative',
+                padding: '0.5rem 1rem',
+                transition: 'all 0.3s ease',
+                '& .logo': {
+                  display: 'flex',
+                  alignItems: 'center',
+                  transform: 'scale(1.1)',
+                  transition: 'transform 0.3s ease',
+                },
+                '&:hover .logo': {
+                  transform: 'scale(1.2) rotate(5deg)',
                 },
               }}
             >
-              Bodrum Nüfus
-              <Box sx={{ 
-                display: 'inline-flex', 
-                animation: 'pulse 2s infinite',
-                '@keyframes pulse': {
-                  '0%': { transform: 'scale(1)' },
-                  '50%': { transform: 'scale(1.1)' },
-                  '100%': { transform: 'scale(1)' },
-                }
-              }}>
+              <span>Bodrum Nüfus</span>
+              <span className="logo">
                 <EvilEyeLogo />
-              </Box>
+              </span>
             </Typography>
 
             {/* Desktop Navigation */}
