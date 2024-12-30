@@ -37,7 +37,7 @@ export default function SearchPage() {
             }}
           >
             <Image
-              src="/images/bodrum-marina.jpg"
+              src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/images/bodrum-marina.jpg`}
               alt="Bodrum Marina"
               fill
               style={{
