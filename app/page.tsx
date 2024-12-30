@@ -94,7 +94,7 @@ const features = [
     action: (
       <Button
         component={Link}
-        href="/nextnufus/search"
+        href="/search"
         variant="contained"
         size="large"
         startIcon={<SearchIcon />}

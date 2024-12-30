@@ -101,7 +101,7 @@ export default function Navbar() {
             <Button 
               variant="contained"
               component={Link}
-              href="/nextnufus/search"
+              href="/search"
               startIcon={<SearchIcon />}
               sx={{
                 background: commonStyles.gradients.primary,
