@@ -19,6 +19,7 @@ import Link from 'next/link';
 import ReachUs from './components/ReachUs';
 import Banner from './components/Banner';
 import { theme, commonStyles } from './theme';
+import ScrollToTop from './components/ScrollToTop';
 
 export default function Home() {
   return (
@@ -73,6 +74,7 @@ export default function Home() {
           </Container>
 
           <ReachUs />
+          <ScrollToTop />
         </Box>
       </Box>
     </ThemeProvider>

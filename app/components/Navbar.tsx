@@ -1,4 +1,6 @@
-import { useState } from 'react';
+'use client';
+
+import { useState, useEffect } from 'react';
 import { 
   AppBar, 
   Toolbar, 
@@ -12,190 +14,236 @@ import {
   ListItem,
   ListItemButton,
   ListItemText,
+  ListItemIcon,
+  useScrollTrigger,
+  Slide,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import CloseIcon from '@mui/icons-material/Close';
-import { useTheme } from '@mui/material/styles';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import EvilEyeLogo from './EvilEyeLogo';
+import HomeIcon from '@mui/icons-material/Home';
 import SearchIcon from '@mui/icons-material/Search';
+import InfoIcon from '@mui/icons-material/Info';
+import CloseIcon from '@mui/icons-material/Close';
+import Link from 'next/link';
+import { useRouter, usePathname } from 'next/navigation';
+import EvilEyeLogo from './EvilEyeLogo';
 import { commonStyles } from '../theme';
 
+interface NavItem {
+  label: string;
+  href: string;
+  icon: JSX.Element;
+}
+
+const navItems: NavItem[] = [
+  { label: 'Ana Sayfa', href: '/', icon: <HomeIcon /> },
+  { label: 'Nüfus Ara', href: '/search', icon: <SearchIcon /> },
+  { label: 'Hakkında', href: '#reach-us', icon: <InfoIcon /> },
+];
+
+function HideOnScroll({ children }: { children: React.ReactElement }) {
+  const trigger = useScrollTrigger();
+
+  return (
+    <Slide appear={false} direction="down" in={!trigger}>
+      {children}
+    </Slide>
+  );
+}
+
 export default function Navbar() {
-  const theme = useTheme();
-  const router = useRouter();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const pathname = usePathname();
+  const router = useRouter();
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
 
-  const scrollToReachUs = () => {
+  const handleNavClick = (href: string) => {
     setMobileOpen(false);
-    const element = document.getElementById('reach-us');
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    } else {
-      router.push('/#reach-us');
+    if (href.startsWith('#')) {
+      const element = document.getElementById(href.substring(1));
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
     }
   };
 
-  const menuItems = [
-    { text: 'Ana Sayfa', href: '/' },
-    { text: 'Nüfus Ara', href: '/search', icon: <SearchIcon /> },
-    { text: 'Bize Ulaşın', action: scrollToReachUs },
-  ];
+  const isActive = (href: string) => {
+    if (href === '/') return pathname === href;
+    return pathname.startsWith(href);
+  };
 
   return (
-    <AppBar 
-      position="sticky"
-      sx={{
-        backgroundColor: 'rgba(255, 255, 255, 0.98)',
-        backdropFilter: 'blur(10px)',
-        boxShadow: commonStyles.shadows.card,
-        borderBottom: commonStyles.borders.light,
-      }}
-    >
-      <Container maxWidth="xl">
-        <Toolbar disableGutters>
-          <Typography
-            variant="h6"
-            noWrap
-            component={Link}
-            href="/"
-            sx={{
-              flexGrow: 1,
-              fontWeight: 700,
-              color: 'primary.main',
-              textDecoration: 'none',
-              display: 'flex',
-              alignItems: 'center',
-              gap: 1,
-              '&:hover': {
-                color: 'primary.dark',
-              },
+    <HideOnScroll>
+      <AppBar 
+        position="sticky"
+        elevation={0}
+        sx={{
+          backgroundColor: 'rgba(255, 255, 255, 0.98)',
+          backdropFilter: 'blur(10px)',
+          borderBottom: commonStyles.borders.light,
+        }}
+      >
+        <Container maxWidth="xl">
+          <Toolbar 
+            disableGutters 
+            sx={{ 
+              minHeight: { xs: '64px', sm: '70px' },
+              justifyContent: 'space-between',
             }}
           >
-            Bodrum Nüfus
-            <Box sx={{ display: 'inline-flex', ml: 1, animation: 'pulse 2s infinite' }}>
-              <EvilEyeLogo />
-            </Box>
-          </Typography>
-
-          {/* Desktop Menu */}
-          <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 2 }}>
-            <Button 
-              color="inherit" 
+            {/* Logo */}
+            <Typography
+              variant="h6"
               component={Link}
               href="/"
               sx={{
-                color: 'text.primary',
+                fontWeight: 700,
+                color: 'primary.main',
+                textDecoration: 'none',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 1,
                 '&:hover': {
-                  backgroundColor: 'rgba(0, 169, 181, 0.04)',
+                  color: 'primary.dark',
                 },
               }}
             >
-              Ana Sayfa
-            </Button>
-            <Button 
-              variant="contained"
-              component={Link}
-              href="/search"
-              startIcon={<SearchIcon />}
-              sx={{
-                background: commonStyles.gradients.primary,
-                '&:hover': {
-                  background: commonStyles.gradients.primaryHover,
-                },
-              }}
-            >
-              Nüfus Ara
-            </Button>
-            <Button 
-              color="inherit"
-              onClick={scrollToReachUs}
-              sx={{ 
-                color: 'text.primary',
-                '&:hover': {
-                  backgroundColor: 'rgba(0, 169, 181, 0.04)',
-                },
-              }}
-            >
-              Bize Ulaşın
-            </Button>
-          </Box>
+              Bodrum Nüfus
+              <Box sx={{ 
+                display: 'inline-flex', 
+                animation: 'pulse 2s infinite',
+                '@keyframes pulse': {
+                  '0%': { transform: 'scale(1)' },
+                  '50%': { transform: 'scale(1.1)' },
+                  '100%': { transform: 'scale(1)' },
+                }
+              }}>
+                <EvilEyeLogo />
+              </Box>
+            </Typography>
 
-          {/* Mobile Menu Button */}
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ 
-              display: { md: 'none' },
-              color: 'primary.main',
-            }}
-          >
-            <MenuIcon />
-          </IconButton>
-        </Toolbar>
-      </Container>
-
-      {/* Mobile Drawer */}
-      <Drawer
-        variant="temporary"
-        anchor="right"
-        open={mobileOpen}
-        onClose={handleDrawerToggle}
-        ModalProps={{
-          keepMounted: true, // Better mobile performance
-        }}
-        sx={{
-          display: { xs: 'block', md: 'none' },
-          '& .MuiDrawer-paper': { 
-            boxSizing: 'border-box', 
-            width: 240,
-            backgroundColor: 'background.default',
-          },
-        }}
-      >
-        <Box sx={{ p: 2, display: 'flex', justifyContent: 'flex-end' }}>
-          <IconButton onClick={handleDrawerToggle}>
-            <CloseIcon />
-          </IconButton>
-        </Box>
-        <List>
-          {menuItems.map((item) => (
-            <ListItem key={item.text} disablePadding>
-              {item.href ? (
-                <ListItemButton
+            {/* Desktop Navigation */}
+            <Box sx={{ 
+              display: { xs: 'none', md: 'flex' },
+              gap: 1,
+            }}>
+              {navItems.map((item) => (
+                <Button
+                  key={item.label}
                   component={Link}
                   href={item.href}
-                  onClick={handleDrawerToggle}
+                  onClick={() => handleNavClick(item.href)}
+                  startIcon={item.icon}
                   sx={{
-                    py: 2,
-                    px: 3,
+                    px: 2,
+                    py: 1,
+                    color: isActive(item.href) ? 'primary.main' : 'text.primary',
+                    backgroundColor: isActive(item.href) ? 'rgba(59, 130, 246, 0.08)' : 'transparent',
+                    borderRadius: 2,
+                    '&:hover': {
+                      backgroundColor: 'rgba(59, 130, 246, 0.12)',
+                    },
                   }}
                 >
-                  <ListItemText primary={item.text} />
-                  {item.icon}
-                </ListItemButton>
-              ) : (
-                <ListItemButton
-                  onClick={item.action}
-                  sx={{
-                    py: 2,
-                    px: 3,
-                  }}
-                >
-                  <ListItemText primary={item.text} />
-                </ListItemButton>
-              )}
-            </ListItem>
-          ))}
-        </List>
-      </Drawer>
-    </AppBar>
+                  {item.label}
+                </Button>
+              ))}
+            </Box>
+
+            {/* Mobile Menu Button */}
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="start"
+              onClick={handleDrawerToggle}
+              sx={{ 
+                display: { md: 'none' },
+                color: 'primary.main',
+              }}
+            >
+              <MenuIcon />
+            </IconButton>
+          </Toolbar>
+        </Container>
+
+        {/* Mobile Navigation Drawer */}
+        <Drawer
+          anchor="right"
+          open={mobileOpen}
+          onClose={handleDrawerToggle}
+          ModalProps={{ keepMounted: true }}
+          sx={{
+            display: { xs: 'block', md: 'none' },
+            '& .MuiDrawer-paper': { 
+              width: 280,
+              backgroundColor: 'background.default',
+            },
+          }}
+        >
+          <Box sx={{ 
+            p: 2,
+            display: 'flex',
+            flexDirection: 'column',
+            height: '100%',
+          }}>
+            <Box sx={{ 
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              mb: 2,
+            }}>
+              <Typography
+                variant="h6"
+                sx={{ 
+                  fontWeight: 600,
+                  color: 'primary.main',
+                }}
+              >
+                Menu
+              </Typography>
+              <IconButton onClick={handleDrawerToggle}>
+                <CloseIcon />
+              </IconButton>
+            </Box>
+
+            <List sx={{ flex: 1 }}>
+              {navItems.map((item) => (
+                <ListItem key={item.label} disablePadding>
+                  <ListItemButton
+                    component={Link}
+                    href={item.href}
+                    onClick={() => handleNavClick(item.href)}
+                    sx={{
+                      py: 2,
+                      backgroundColor: isActive(item.href) ? 'rgba(59, 130, 246, 0.08)' : 'transparent',
+                      borderRadius: 2,
+                      mb: 1,
+                    }}
+                  >
+                    <ListItemIcon sx={{ 
+                      color: isActive(item.href) ? 'primary.main' : 'text.primary',
+                      minWidth: 40,
+                    }}>
+                      {item.icon}
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary={item.label}
+                      primaryTypographyProps={{
+                        sx: { 
+                          color: isActive(item.href) ? 'primary.main' : 'text.primary',
+                          fontWeight: isActive(item.href) ? 600 : 400,
+                        }
+                      }}
+                    />
+                  </ListItemButton>
+                </ListItem>
+              ))}
+            </List>
+          </Box>
+        </Drawer>
+      </AppBar>
+    </HideOnScroll>
   );
 } 

@@ -1,15 +1,22 @@
+'use client';
+
 import { Box, Container, Grid, Typography, TextField, Button, Paper } from '@mui/material';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PhoneIcon from '@mui/icons-material/Phone';
 import EmailIcon from '@mui/icons-material/Email';
 
 export default function ReachUs() {
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <Box 
       id="reach-us" 
       sx={{ 
         py: { xs: 6, md: 8 },
         bgcolor: 'background.default',
+        borderTop: theme => `1px solid ${theme.palette.divider}`,
       }}
     >
       <Container

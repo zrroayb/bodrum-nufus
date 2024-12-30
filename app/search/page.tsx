@@ -4,8 +4,10 @@ import { Box, Container, Typography, ThemeProvider, CssBaseline } from '@mui/mat
 import Image from 'next/image';
 import SearchContainer from '../components/SearchContainer';
 import Navbar from '../components/Navbar';
+import ReachUs from '../components/ReachUs';
 import { theme, commonStyles } from '../theme';
 import { NUFUS_DATA } from '../data/nufusData';
+import ScrollToTop from '../components/ScrollToTop';
 
 export default function SearchPage() {
   return (
@@ -116,6 +118,10 @@ export default function SearchPage() {
             searchResults={NUFUS_DATA}
           />
         </Container>
+
+        {/* Add ReachUs component */}
+        <ReachUs />
+        <ScrollToTop />
       </Box>
     </ThemeProvider>
   );
