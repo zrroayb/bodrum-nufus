@@ -17,6 +17,7 @@ import {
   ListItemIcon,
   useScrollTrigger,
   Slide,
+  useTheme,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import HomeIcon from '@mui/icons-material/Home';
@@ -27,6 +28,8 @@ import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 import EvilEyeLogo from './EvilEyeLogo';
 import { commonStyles } from '../theme';
+import ArticleIcon from '@mui/icons-material/Article';
+import DashboardIcon from '@mui/icons-material/Dashboard';
 
 interface NavItem {
   label: string;
@@ -37,6 +40,7 @@ interface NavItem {
 const navItems: NavItem[] = [
   { label: 'Ana Sayfa', href: '/', icon: <HomeIcon /> },
   { label: 'Nüfus Ara', href: '/search', icon: <SearchIcon /> },
+  { label: 'Blog', href: '/blog', icon: <ArticleIcon /> },
   { label: 'Hakkında', href: '#reach-us', icon: <InfoIcon /> },
 ];
 
@@ -54,6 +58,7 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
+  const theme = useTheme();
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -73,6 +78,30 @@ export default function Navbar() {
     if (href === '/') return pathname === href;
     return pathname.startsWith(href);
   };
+
+  const drawer = (
+    <Box sx={{ width: 250 }}>
+      <List>
+        {navItems.map((item) => (
+          <ListItem
+            key={item.label}
+            component={Link}
+            href={item.href}
+            sx={{
+              color: pathname === item.href ? 'primary.main' : 'text.primary',
+              bgcolor: pathname === item.href ? 'action.selected' : 'transparent',
+              '&:hover': {
+                bgcolor: 'action.hover',
+              },
+            }}
+          >
+            <ListItemIcon sx={{ color: 'inherit' }}>{item.icon}</ListItemIcon>
+            <ListItemText primary={item.label} />
+          </ListItem>
+        ))}
+      </List>
+    </Box>
+  );
 
   return (
     <HideOnScroll>

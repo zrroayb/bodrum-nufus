@@ -1,11 +1,13 @@
 'use client';
 
-import { Box, Container, Typography, Grid, Paper, IconButton, LinearProgress } from '@mui/material';
+import { Box, Container, Typography, Grid, Paper, IconButton, LinearProgress, Button } from '@mui/material';
 import { useState, useEffect } from 'react';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import Image from 'next/image';
 import { commonStyles } from '../theme';
+import { BlogPost } from '../data/blogData';
+import Link from 'next/link';
 
 const carouselItems = [
   {
@@ -35,27 +37,29 @@ const carouselItems = [
   },
 ];
 
-const blogPosts = [
-  {
-    title: 'Nüfus Artışı',
-    description: 'Bodrum\'da son 5 yılda görülen nüfus artışı ve etkileri',
-    date: '15 Mart 2024',
-  },
-  {
-    title: 'Mahalle Analizi',
-    description: 'En kalabalık mahalleler ve demografik özellikleri',
-    date: '12 Mart 2024',
-  },
-  {
-    title: 'Mevsimsel Değişim',
-    description: 'Yaz ve kış aylarında nüfus değişimi',
-    date: '10 Mart 2024',
-  },
-];
-
 export default function FeaturesSection() {
   const [activeSlide, setActiveSlide] = useState(0);
   const [progress, setProgress] = useState(0);
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
+  const [recentPosts, setRecentPosts] = useState<BlogPost[]>([]);
+
+  useEffect(() => {
+    // Load blog posts from localStorage
+    if (typeof window !== 'undefined') {
+      const savedData = localStorage.getItem('blogData');
+      const blogData = savedData ? JSON.parse(savedData) : [];
+      // Get the latest 3 posts and sort by date
+      const sortedPosts = [...blogData].sort((a, b) => 
+        new Date(b.date).getTime() - new Date(a.date).getTime()
+      ).slice(0, 3);
+      setBlogPosts(sortedPosts);
+      // Get latest 3 posts
+      const latestPosts = [...blogData]
+        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+        .slice(0, 3);
+      setRecentPosts(latestPosts);
+    }
+  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -224,32 +228,52 @@ export default function FeaturesSection() {
 
           {/* Blog Posts Section */}
           <Grid item xs={12} md={5}>
-            <Typography
-              variant="h4"
-              gutterBottom
-              sx={{
-                background: commonStyles.gradients.primary,
-                backgroundClip: 'text',
-                WebkitBackgroundClip: 'text',
-                color: 'transparent',
-                mb: 3,
-              }}
-            >
-              Son Yazılar
-            </Typography>
+            <Box sx={{ 
+              display: 'flex', 
+              justifyContent: 'space-between', 
+              alignItems: 'center',
+              mb: 3 
+            }}>
+              <Typography
+                variant="h4"
+                sx={{
+                  background: commonStyles.gradients.primary,
+                  backgroundClip: 'text',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  fontWeight: 600,
+                }}
+              >
+                Son Yazılar
+              </Typography>
+              <Button
+                component={Link}
+                href="/blog"
+                sx={{
+                  color: 'primary.main',
+                  fontWeight: 500,
+                  '&:hover': {
+                    backgroundColor: 'rgba(59, 130, 246, 0.08)',
+                  },
+                }}
+              >
+                Tümünü Gör
+              </Button>
+            </Box>
             <Grid container spacing={2}>
-              {blogPosts.map((post, index) => (
-                <Grid item xs={12} key={index}>
+              {recentPosts.map((post) => (
+                <Grid item xs={12} key={post.id}>
                   <Paper
                     elevation={0}
                     sx={{
                       p: 3,
-                      border: commonStyles.borders.light,
+                      border: '1px solid',
+                      borderColor: 'divider',
                       transition: 'all 0.3s ease',
                       cursor: 'pointer',
                       '&:hover': {
                         transform: 'translateY(-4px)',
-                        boxShadow: commonStyles.shadows.hover,
+                        boxShadow: (theme) => theme.shadows[4],
                       },
                     }}
                   >
@@ -257,10 +281,10 @@ export default function FeaturesSection() {
                       {post.title}
                     </Typography>
                     <Typography variant="body2" color="text.secondary" paragraph>
-                      {post.description}
+                      {post.summary}
                     </Typography>
                     <Typography variant="caption" color="primary">
-                      {post.date}
+                      {new Date(post.date).toLocaleDateString('tr-TR')}
                     </Typography>
                   </Paper>
                 </Grid>

@@ -5,6 +5,7 @@ import Image from 'next/image';
 import SearchContainer from '../components/SearchContainer';
 import { commonStyles } from '../theme';
 import { NUFUS_DATA } from '../data/nufusData';
+import ReachUs from '../components/ReachUs';
 
 export default function SearchPage() {
   return (
@@ -111,6 +112,8 @@ export default function SearchPage() {
           searchResults={NUFUS_DATA}
         />
       </Container>
+
+      <ReachUs />
     </Box>
   );
 } 

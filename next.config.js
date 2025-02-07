@@ -1,16 +1,15 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: "export",
+  output: "standalone",
   images: {
-    unoptimized: true,
+    domains: ["picsum.photos", "ui-avatars.com"],
   },
-  trailingSlash: true,
 };
 
 // Add basePath and assetPrefix only in production for GitHub Pages
-if (process.env.NODE_ENV === 'production') {
-  nextConfig.basePath = '/nextnufus';
-  nextConfig.assetPrefix = '/nextnufus/';
+if (process.env.NODE_ENV === "production") {
+  nextConfig.basePath = "/nextnufus";
+  nextConfig.assetPrefix = "/nextnufus/";
 }
 
 module.exports = nextConfig;

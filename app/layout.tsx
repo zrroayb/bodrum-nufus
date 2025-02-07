@@ -1,10 +1,15 @@
-'use client';
-
-import { ThemeProvider, CssBaseline, Box } from '@mui/material';
-import { theme } from './theme';
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
 import Navbar from './components/Navbar';
-import ReachUs from './components/ReachUs';
+import Providers from './providers';
 import ScrollToTop from './components/ScrollToTop';
+
+const inter = Inter({ subsets: ['latin'] });
+
+export const metadata: Metadata = {
+  title: 'Bodrum Nüfus',
+  description: 'Bodrum nüfus bilgileri ve istatistikleri',
+};
 
 export default function RootLayout({
   children,
@@ -13,18 +18,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="tr">
-      <body style={{ margin: 0 }}>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-            <Navbar />
-            <Box component="main" sx={{ flex: 1 }}>
-              {children}
-            </Box>
-            <ReachUs />
-            <ScrollToTop />
-          </Box>
-        </ThemeProvider>
+      <body className={inter.className}>
+        <Providers>
+          <Navbar />
+          {children}
+          <ScrollToTop />
+        </Providers>
       </body>
     </html>
   );
