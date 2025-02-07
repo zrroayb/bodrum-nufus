@@ -89,28 +89,38 @@ export default function BlogManagement() {
       }
 
       const currentDate = new Date().toISOString().split('T')[0];
+      let updatedData;
 
       if (selectedItem) {
-        const updatedData = data.map(item =>
-          item.id === selectedItem.id ? { ...item, ...formData } : item
-        );
-        setData(updatedData);
-        localStorage.setItem('blogData', JSON.stringify(updatedData));
+        updatedData = data.map(item => {
+          if (item.id === selectedItem.id) {
+            return {
+              ...item,
+              title: formData.title || item.title,
+              content: formData.content || item.content,
+              summary: formData.summary || item.summary,
+              image: formData.image || item.image,
+              author: formData.author || item.author,
+            };
+          }
+          return item;
+        });
       } else {
-        const newId = Math.max(...data.map(item => item.id), 0) + 1;
-        const newItem: BlogPost = {
-          id: newId,
-          title: formData.title || '',
-          content: formData.content || '',
-          summary: formData.summary || '',
+        const maxId = data.reduce((max, item) => Math.max(max, item.id), 0);
+        const newPost = {
+          id: maxId + 1,
+          title: formData.title,
+          content: formData.content,
+          summary: formData.summary,
           image: formData.image || `https://picsum.photos/seed/blog${Date.now()}/800/400`,
           date: currentDate,
           author: formData.author || 'Admin'
         };
-        const updatedData = [...data, newItem];
-        setData(updatedData);
-        localStorage.setItem('blogData', JSON.stringify(updatedData));
+        updatedData = [...data, newPost];
       }
+
+      setData(updatedData);
+      localStorage.setItem('blogData', JSON.stringify(updatedData));
 
       setSnackbar({
         open: true,
