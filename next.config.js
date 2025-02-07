@@ -1,10 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: "standalone",
+  output: "export",
   images: {
     domains: ["picsum.photos", "ui-avatars.com"],
     unoptimized: true,
   },
+  basePath: "/your-repo-name",
+  assetPrefix: "/your-repo-name/",
   env: {
     NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
