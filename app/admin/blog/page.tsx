@@ -97,12 +97,15 @@ export default function BlogManagement() {
         setData(updatedData);
         localStorage.setItem('blogData', JSON.stringify(updatedData));
       } else {
+        const newId = Math.max(...data.map(item => item.id), 0) + 1;
         const newItem: BlogPost = {
-          id: Math.max(...data.map(item => item.id), 0) + 1,
+          id: newId,
+          title: formData.title || '',
+          content: formData.content || '',
+          summary: formData.summary || '',
           image: formData.image || `https://picsum.photos/seed/blog${Date.now()}/800/400`,
           date: currentDate,
-          author: formData.author || 'Admin',
-          ...formData as BlogPost
+          author: formData.author || 'Admin'
         };
         const updatedData = [...data, newItem];
         setData(updatedData);
