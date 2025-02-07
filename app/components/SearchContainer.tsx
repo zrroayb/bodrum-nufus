@@ -40,7 +40,7 @@ export default function SearchContainer({
 }: SearchContainerProps) {
   const [selectedRow, setSelectedRow] = useState<DataItem | null>(null);
   // Get unique values for each column
-  const uniqueMahalleler = [...new Set(data.map(item => item.mahalle))].sort();
+  const uniqueMahalleler = Array.from(new Set(data.map(item => item.mahalle))).sort();
   const uniqueNufusRanges = [
     '0-1000',
     '1000-5000',

@@ -63,7 +63,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 
 ### Support notes
 
-This template has been developed with the App Router (`app`) and React Server Components. If you’re unfamiliar with these beta features, you can find more information about them on the Next.js beta documentation page. So, please note that any request dealing with React (e.g. extra features, customisations, et cetera) is to be considered out of the support scope.
+This template has been developed with the App Router (`app`) and React Server Components. If you're unfamiliar with these beta features, you can find more information about them on the Next.js beta documentation page. So, please note that any request dealing with React (e.g. extra features, customisations, et cetera) is to be considered out of the support scope.
 
 For more information about what support covers, please see our (FAQs)[https://cruip.com/faq/].
 
@@ -75,7 +75,7 @@ For more information about what support covers, please see our (FAQs)[https://cr
 
 - Released under the [GPL](https://www.gnu.org/licenses/gpl-3.0.html).
 - Copyright 2024 [Cruip](https://cruip.com/).
-- Use it for personal and commercial projects, but please don’t republish, redistribute, or resell the template.
+- Use it for personal and commercial projects, but please don't republish, redistribute, or resell the template.
 - Attribution is not required, although it is really appreciated.
 
 ## About Us
@@ -86,3 +86,4 @@ We're an Italian developer/designer duo creating high-quality design/code resour
 
 If you would like to know when we release new resources, you can follow [@pacovitiello](https://x.com/pacovitiello) and [@DavidePacilio](https://x.com/DavidePacilio) on X, or you can subscribe to our [newsletter](https://cruip.com/newsletter/).
 
+[![Deploy to GitHub Pages](https://github.com/YOUR_USERNAME/bodrum-nufus/actions/workflows/deploy.yml/badge.svg)](https://github.com/YOUR_USERNAME/bodrum-nufus/actions/workflows/deploy.yml)
