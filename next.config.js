@@ -2,10 +2,7 @@
 const nextConfig = {
   output: "standalone",
   images: {
-    domains: process.env.NEXT_PUBLIC_IMAGE_DOMAINS?.split(",") || [
-      "picsum.photos",
-      "ui-avatars.com",
-    ],
+    domains: ["picsum.photos", "ui-avatars.com"],
     unoptimized: true,
   },
   env: {
@@ -13,6 +10,12 @@ const nextConfig = {
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
     NEXT_PUBLIC_ENABLE_BLOG: process.env.NEXT_PUBLIC_ENABLE_BLOG,
     NEXT_PUBLIC_ENABLE_ADMIN: process.env.NEXT_PUBLIC_ENABLE_ADMIN,
+  },
+  typescript: {
+    ignoreBuildErrors: false,
+  },
+  eslint: {
+    ignoreDuringBuilds: false,
   },
 };
 

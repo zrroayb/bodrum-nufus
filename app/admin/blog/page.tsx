@@ -11,24 +11,29 @@ import {
   IconButton,
 } from '@mui/material';
 import ImageIcon from '@mui/icons-material/Image';
-import { BlogPost } from '../../data/blogData';
+import { BlogPost, getBlogData } from '../../data/blogData';
 import PageLayout from '../../components/admin/PageLayout';
 import DataTable from '../../components/admin/DataTable';
 import FormDialog from '../../components/admin/FormDialog';
+
+interface FormDataType {
+  title?: string;
+  content?: string;
+  summary?: string;
+  image?: string;
+  author?: string;
+}
 
 export default function BlogManagement() {
   const [data, setData] = useState<BlogPost[]>([]);
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedItem, setSelectedItem] = useState<BlogPost | null>(null);
-  const [formData, setFormData] = useState<Partial<BlogPost>>({});
+  const [formData, setFormData] = useState<FormDataType>({});
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' as 'success' | 'error' });
   const [previewImage, setPreviewImage] = useState<string | null>(null);
 
   useEffect(() => {
-    const savedData = localStorage.getItem('blogData');
-    if (savedData) {
-      setData(JSON.parse(savedData));
-    }
+    setData(getBlogData());
   }, []);
 
   const handleAdd = () => {
@@ -89,29 +94,28 @@ export default function BlogManagement() {
       }
 
       const currentDate = new Date().toISOString().split('T')[0];
-      let updatedData;
+      let updatedData: BlogPost[];
 
       if (selectedItem) {
-        updatedData = data.map(item => {
-          if (item.id === selectedItem.id) {
-            return {
-              ...item,
-              title: formData.title || item.title,
-              content: formData.content || item.content,
-              summary: formData.summary || item.summary,
-              image: formData.image || item.image,
-              author: formData.author || item.author,
-            };
-          }
-          return item;
-        });
+        updatedData = data.map(item => 
+          item.id === selectedItem.id 
+            ? {
+                ...item,
+                title: formData.title!,
+                content: formData.content!,
+                summary: formData.summary!,
+                image: formData.image || item.image,
+                author: formData.author || item.author,
+              }
+            : item
+        );
       } else {
-        const maxId = data.reduce((max, item) => Math.max(max, item.id), 0);
-        const newPost = {
+        const maxId = Math.max(0, ...data.map(item => item.id));
+        const newPost: BlogPost = {
           id: maxId + 1,
-          title: formData.title,
-          content: formData.content,
-          summary: formData.summary,
+          title: formData.title!,
+          content: formData.content!,
+          summary: formData.summary!,
           image: formData.image || `https://picsum.photos/seed/blog${Date.now()}/800/400`,
           date: currentDate,
           author: formData.author || 'Admin'
@@ -121,13 +125,12 @@ export default function BlogManagement() {
 
       setData(updatedData);
       localStorage.setItem('blogData', JSON.stringify(updatedData));
-
+      setOpenDialog(false);
       setSnackbar({
         open: true,
         message: `Blog yazısı başarıyla ${selectedItem ? 'güncellendi' : 'eklendi'}`,
         severity: 'success'
       });
-      setOpenDialog(false);
     } catch (error) {
       setSnackbar({
         open: true,
